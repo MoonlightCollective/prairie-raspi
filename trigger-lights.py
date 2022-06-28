@@ -15,16 +15,18 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
     if msg.payload == b"portal1 forward":
-        sendArduino(b"forward\n")
+        sendArduino("forward\n")
     elif msg.payload == b"portal1 backward":
-        sendArduino(b"backward\n")
+        sendArduino("backward\n")
 
 def sendArduino(msg):
     print("sending to arduino: "+msg)
-    ser.write(msg)
+    ser.write(msg.encode('utf-8'))
 
-client = mqtt.Client("rasp1")
+client = mqtt.Client("rasp2")
 client.username_pw_set("moonlight","collective")
+client.on_connect = on_connect
+client.on_message = on_message
 client.connect(host="73.254.192.189",port=41799)
 client.on_message = on_message
 client.on_connect = on_connect
