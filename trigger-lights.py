@@ -33,7 +33,7 @@ ser.reset_input_buffer()
 if automationhat.is_automation_hat():
     automationhat.light.power.write(1)
 
-playcmd = 'aplay -D sysdefault:CARD=Headphones transition.wav'
+playcmd = 'aplay -D sysdefault:CARD=Headphones audio/transition.wav'
 
 # we have three states... CLEAR,FORWARD,BACKWARD
 # 0 = the portal is empty, no one is walking
