@@ -3,7 +3,7 @@ import serial
 import time
 import paho.mqtt.client as mqtt
 import automationhat
-import pygame
+from subprocess import call
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -27,14 +27,13 @@ client.on_connect = on_connect
 client.on_message = on_message
 client.connect(host="73.254.192.189",port=41799)
 
-ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
 
 if automationhat.is_automation_hat():
     automationhat.light.power.write(1)
 
-pygame.mixer.init()
-pygame.mixer.music.load("transition.wav")
+playcmd = 'aplay -D sysdefault:CARD=Headphones transition.wav'
 
 # we have three states... CLEAR,FORWARD,BACKWARD
 # 0 = the portal is empty, no one is walking
@@ -57,10 +56,10 @@ while True:
     if state == 0:
       if automationhat.input[0].read() == 0:
         # someone is going forward
-        client.publish ("prairie","portal1 forward") 
         print ("forward")
-        sendArduino("forward")
-        pygame.mixer.music.play()
+        sendArduino("forward\n")
+        call ([playcmd],shell=True) 
+        client.publish ("prairie","portal1 forward") 
         state = 1
         time.sleep(0.5) # add a tiny delay to avoid retriggering too often
       #elif automationhat.input[1].read() == 0:
