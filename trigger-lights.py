@@ -3,15 +3,16 @@ import serial
 import time
 import paho.mqtt.client as mqtt
 import automationhat
-from subprocess import call
+import sounddevice as sd
+import soundfile as sf
+import sys
 
-# The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("prairie")
+    client.subscribe("Portal")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -21,11 +22,13 @@ def sendArduino(msg):
     print("sending to arduino: "+msg)
     ser.write(msg.encode('utf-8'))
 
+data, sr = sf.read("TestAudio/transition.wav")
+dataW, srW = sf.read("TestAudio/whispers3.wav")
+
 client = mqtt.Client("rasp")
-client.username_pw_set("moonlight","collective")
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect(host="73.254.192.189",port=41799)
+client.connect(host="192.168.0.202")
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
@@ -33,7 +36,8 @@ ser.reset_input_buffer()
 if automationhat.is_automation_hat():
     automationhat.light.power.write(1)
 
-playcmd = 'aplay -D sysdefault:CARD=Headphones audio/transition.wav'
+playcmd1 = 'aplay -D sysdefault:CARD=Headphones audio/transition.wav'
+playcmd2 = 'aplay -D sysdefault:CARD=vc4hdmi audio/transition.wav'
 
 # we have three states... CLEAR,FORWARD,BACKWARD
 # 0 = the portal is empty, no one is walking
@@ -45,21 +49,26 @@ playcmd = 'aplay -D sysdefault:CARD=Headphones audio/transition.wav'
 state = 0
 last = time.time()
 
+sd.play(dataW, srW, loop=True)
+
 while True:
     client.loop()
 
     if time.time() - last > 30:
       # send keep alive every 30 seconds
       last = time.time()
-      client.publish ("prairie","portal1 alive")
+      client.publish ("Portal","Portal1-Alive")
 
     if state == 0:
       if automationhat.input[0].read() == 0:
         # someone is going forward
         print ("forward")
         sendArduino("forward\n")
-        call ([playcmd],shell=True) 
-        client.publish ("prairie","portal1 forward") 
+        # subprocess.run ([playcmd1],shell=True) 
+        # call ([playcmd2],shell=True)
+        #client.publish ("Portal","Portal1-Enter") 
+        client.publish ("Booth","DoorInitialOpen")
+        sd.play(data,sr)
         state = 1
         time.sleep(0.5) # add a tiny delay to avoid retriggering too often
       #elif automationhat.input[1].read() == 0:
