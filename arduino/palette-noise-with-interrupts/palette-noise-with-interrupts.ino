@@ -18,7 +18,8 @@ DEFINE_GRADIENT_PALETTE( magenta_pink_gp ) {
 
 CRGB emotionColors[4];
 
-CRGBPalette16 currentPalette = magenta_pink_gp;
+// CRGBPalette16 currentPalette = magenta_pink_gp;
+CRGBPalette16 currentPalette = Rainbow_gp;
 
 char dataString[50] = {0};
 uint16_t oldtime = millis();
