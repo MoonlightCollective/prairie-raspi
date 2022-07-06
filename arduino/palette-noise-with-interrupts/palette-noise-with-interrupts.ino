@@ -113,11 +113,12 @@ void mapNoiseToLEDsUsingPalette()
 
       // brighten up, as the color palette itself often contains the 
       // light/dark dynamic range desired
-      if( bri > 127 ) {
-        bri = 255;
-      } else {
-        bri = dim8_raw( bri * 2);
-      }
+//      if( bri > 127 ) {
+//        bri = 255;
+//      } else {
+//        bri = dim8_raw( bri * 2);
+//      }
+      bri = dim8_raw(bri);
 
       CRGB color = ColorFromPalette( currentPalette, index, bri);
       leds[i] = color;
