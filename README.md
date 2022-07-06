@@ -8,3 +8,9 @@ curl https://get.pimoroni.com/automationhat | bash
 ```
 
 Also make sure the Raspberry pi has i2c interface enabled. To enable run `raspi-config` and enable interfaces/i2c.
+
+To install the arduino tools:
+- arduino-cli is included the prairi-raspi/bin folder
+- just add "export PATH=$PATH:/home/moonlight/prairie-raspi/bin" to the .bashrc file
+
+

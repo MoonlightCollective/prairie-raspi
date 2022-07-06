@@ -24,36 +24,40 @@ def sendArduino(msg):
 
 data, sr = sf.read("TestAudio/transition.wav")
 dataW, srW = sf.read("TestAudio/whispers3.wav")
+dataEnter, srEnter = sf.read("audio/Portal/PortalIdea2.wav")
+dataExit, srExit = sf.read("audio/Portal/PortalIdea6b.wav")
 
 client = mqtt.Client("rasp")
 client.on_connect = on_connect
 client.on_message = on_message
 client.connect(host="192.168.0.202")
+client.loop_start()
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
 
-playcmd = 'aplay -D sysdefault:CARD=Headphones audio/transition.wav'
-
 #messages we might get from the arduino:
 # "enter" = person walks through portal going forward
+# "exit" = person walks through the other direction
 
 last = time.time()
 
 while True:
-    client.loop()
-
     if time.time() - last > 30:
       # send keep alive every 30 seconds
       last = time.time()
-      client.publish ("Portal","{\"Message\":\"Alive\",\"n\",1}")
+      client.publish ("Portal","alive")
 
     if ser.in_waiting > 0:
       line = ser.readline().decode('utf-8').rstrip()
       print(line)
 
       if line=="enter":
-        sd.play(data,sr)
-        client.publish ("Portal","{\"Message\":\"Enter\",\"n\",1}")
+        sd.play(dataEnter,srEnter)
+        client.publish ("Portal","Enter")
+
+      if line=="exit":
+        sd.play(dataExit,srExit)
+        client.publish ("Portal","Exit")
     
     time.sleep(0.1)
