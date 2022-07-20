@@ -1,0 +1,14 @@
+[Unit]
+Description=Prairie Script Runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=moonlight
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/home/moonlight/prairie-raspi/run.sh
+
+[Install]
+WantedBy=default.target
