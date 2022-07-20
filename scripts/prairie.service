@@ -8,7 +8,7 @@ User=moonlight
 Type=simple
 Restart=always
 RestartSec=1
-ExecStart=/home/moonlight/prairie-raspi/run.sh
+ExecStart=/home/moonlight/prairie-raspi/scripts/run.sh
 
 [Install]
 WantedBy=default.target
