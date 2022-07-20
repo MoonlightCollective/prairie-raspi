@@ -4,7 +4,7 @@ To set up a new Raspberry PI device for use in our installation:
 
 ```
 sudo apt install git
-git clone https://github.com/MoonlightCollective/prairie-raspo
+git clone https://github.com/MoonlightCollective/prairie-raspi
 cd prairie-raspi/scripts
 ./setup-pi.sh
 ```
