@@ -10,5 +10,9 @@ pwd
 
 if [[ "$HOSTNAME" == *"portal"* ]]; then
     echo "Running portal script"
-    ./portal.py
+    /home/moonlight/prairie-raspi/portal.py
+fi
+if [[ "$HOSTNAME" == *"booth"* ]]; then
+    echo "Running booth script"
+    /home/moonlight/prairie-raspi/booth.py
 fi

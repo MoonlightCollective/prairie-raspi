@@ -30,8 +30,11 @@ dataExit, srExit = sf.read("audio/Portal/PortalIdea6b.wav")
 client = mqtt.Client("rasp")
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect(host="192.168.0.202")
-client.loop_start()
+try:
+  client.connect(host="192.168.0.202")
+  client.loop_start()
+except:
+  pass
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
