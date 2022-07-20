@@ -21,6 +21,9 @@ sed -i -e "s/additional_urls: []/additional_urls: \n  [https:\/\/adafruit.github
 ~/bin/arduino-cli core install adafruit:samd
 ~/bin/arduino-cli lib install FastLED
 
+#enable serial terminal
+sudo echo "enable_uart=1" >> /boot/config.txt
+
 #install prairie service
 sudo cp /home/moonlight/prairie-raspi/scripts/prairie.service /etc/systemd/system
 sudo systemctl enable prairie
