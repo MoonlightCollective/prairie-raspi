@@ -7,7 +7,7 @@ rm influxdb.key
 
 #install packages
 sudo apt update
-sudo apt upgrade
+sudo apt upgrade -y
 sudo apt install -y mosquitto-clients libasound-dev python3 libportaudio2 libsndfile1 python3-numpy libfl2 telegraf python3-pip
 sudo pip install sounddevice pyserial paho-mqtt soundfile
 
@@ -16,7 +16,7 @@ cd ~
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 echo "export PATH=\$PATH:/home/moonlight/bin">> ~/.bashrc
 ~/bin/arduino-cli config init
-sed -i -e "s/additional_urls: []/additional_urls: \n  [https:\/\/adafruit.github.io\/arduino-board-index\/package_adafruit_index.json]/g" ~/.arduino15/arduino-cli.yaml
+sed -i -e "s/additional_urls: /[/]/additional_urls: \n    /[https:\/\/adafruit.github.io\/arduino-board-index\/package_adafruit_index.json/]/g" ~/.arduino15/arduino-cli.yaml
 ~/bin/arduino-cli core update-index
 ~/bin/arduino-cli core install adafruit:samd
 ~/bin/arduino-cli lib install FastLED
