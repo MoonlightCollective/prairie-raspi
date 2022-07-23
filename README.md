@@ -4,7 +4,7 @@ To set up a new Raspberry PI device for use in our installation:
 
 ```
 sudo apt install git
-git clone https://github.com/MoonlightCollective/prairie-raspo
+git clone https://github.com/MoonlightCollective/prairie-raspi
 cd prairie-raspi/scripts
 ./setup-pi.sh
 ```
@@ -19,7 +19,9 @@ sudo nano /etc/dhcpcd.conf
 
 Compiling and updating arduino sketches to feather m4 example:
 ```
+sudo systemctl stop prairie
 arduino-cli compile --fqbn adafruit:samd:adafruit_feather_m4 palette-noise-with-interrupts
 arduino-cli board list
 arduino-cli upload -p /dev/ttyACM0 --fqbn adafruit:samd:adafruit_feather_m4 palette-noise-with-interrupts
+sudo systemctl start prairie
 ```
