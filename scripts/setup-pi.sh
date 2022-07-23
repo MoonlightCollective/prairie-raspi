@@ -16,7 +16,7 @@ cd ~
 curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | sh
 echo "export PATH=\$PATH:/home/moonlight/bin">> ~/.bashrc
 ~/bin/arduino-cli config init
-sed -i -e "s/additional_urls: /[/]/additional_urls: \n    /[https:\/\/adafruit.github.io\/arduino-board-index\/package_adafruit_index.json/]/g" ~/.arduino15/arduino-cli.yaml
+sed -i -e "s/additional_urls: \[\]/additional_urls: \n    \[https:\/\/adafruit.github.io\/arduino-board-index\/package_adafruit_index.json\]/g" ~/.arduino15/arduino-cli.yaml
 ~/bin/arduino-cli core update-index
 ~/bin/arduino-cli core install adafruit:samd
 ~/bin/arduino-cli lib install FastLED
