@@ -24,8 +24,8 @@ def sendArduino(msg):
 
 data, sr = sf.read("TestAudio/transition.wav")
 dataW, srW = sf.read("TestAudio/whispers3.wav")
-dataEnter, srEnter = sf.read("audio/Portal/PortalIdea2.wav")
-dataExit, srExit = sf.read("audio/Portal/PortalIdea6b.wav")
+dataEnter, srEnter = sf.read("audio/Portal/PortalEnter.wav")
+dataExit, srExit = sf.read("audio/Portal/PortalExit.wav")
 
 client = mqtt.Client("rasp")
 client.on_connect = on_connect
