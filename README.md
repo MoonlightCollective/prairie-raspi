@@ -25,3 +25,8 @@ arduino-cli board list
 arduino-cli upload -p /dev/ttyACM0 --fqbn adafruit:samd:adafruit_feather_m4 palette-noise-with-interrupts
 sudo systemctl start prairie
 ```
+
+Some audio targets are set using symlinks, update the link target using `ln -sf`
+```
+ln -sf path/to/target.wav PortalExit.wav
+```
