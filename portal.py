@@ -7,6 +7,8 @@ import soundfile as sf
 import sys
 import json
 import socket
+import time
+import math
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -52,11 +54,11 @@ while True:
     if time.time() - last > 30:
       # send keep alive every 30 seconds
       last = time.time()
-      data = {}
-      data['name'] = 'keep-alive'
-      data['timestamp'] = time.time()
-      data['host'] = socket.gethostname()
-      client.publish ("Portal",json.dumps(data))
+      fieldDict = { "sender":"portal1" }
+      tagsDict = { "host":socket.gethostname() }
+      msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+      json_object = json.dumps(msgDict)
+      client.publish ("Portal",json_object)
 
     if ser.in_waiting > 0:
       line = ser.readline().decode('utf-8').rstrip()
@@ -64,20 +66,18 @@ while True:
 
       if line=="enter":
         sd.play(dataEnter,srEnter)
-        data = {}
-        data['name'] = 'trigger'
-        data['timestamp'] = time.time()
-        data['host'] = socket.gethostname()
-        data['direction'] = 'forward'
-        client.publish ("Portal",json.dumps(data))
+        fieldDict = { "sender":"portal1", "direction":"forward" }
+        tagsDict = { "host":socket.gethostname() }
+        msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+        json_object = json.dumps(msgDict)
+        client.publish ("Portal",json_object)
 
       if line=="exit":
         sd.play(dataExit,srExit)
-        data = {}
-        data['name'] = 'trigger'
-        data['timestamp'] = time.time()
-        data['host'] = socket.gethostname()
-        data['direction'] = 'backward'
-        client.publish ("Portal",json.dumps(data))
+        fieldDict = { "sender":"portal1", "direction":"backward" }
+        tagsDict = { "host":socket.gethostname() }
+        msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+        json_object = json.dumps(msgDict)
+        client.publish ("Portal",json_object)
     
     time.sleep(0.1)
