@@ -5,6 +5,8 @@ import paho.mqtt.client as mqtt
 import sounddevice as sd
 import soundfile as sf
 import sys
+import json
+import socket
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -33,7 +35,8 @@ client.on_message = on_message
 try:
   client.connect(host="192.168.0.202")
   client.loop_start()
-except:
+except Exception as e:
+  print (e)
   pass
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
@@ -49,7 +52,11 @@ while True:
     if time.time() - last > 30:
       # send keep alive every 30 seconds
       last = time.time()
-      client.publish ("Portal","alive")
+      data = {}
+      data['name'] = 'keep-alive'
+      data['timestamp'] = time.time()
+      data['host'] = socket.gethostname()
+      client.publish ("Portal",json.dumps(data))
 
     if ser.in_waiting > 0:
       line = ser.readline().decode('utf-8').rstrip()
@@ -57,10 +64,20 @@ while True:
 
       if line=="enter":
         sd.play(dataEnter,srEnter)
-        client.publish ("Portal","Enter")
+        data = {}
+        data['name'] = 'trigger'
+        data['timestamp'] = time.time()
+        data['host'] = socket.gethostname()
+        data['direction'] = 'forward'
+        client.publish ("Portal",json.dumps(data))
 
       if line=="exit":
         sd.play(dataExit,srExit)
-        client.publish ("Portal","Exit")
+        data = {}
+        data['name'] = 'trigger'
+        data['timestamp'] = time.time()
+        data['host'] = socket.gethostname()
+        data['direction'] = 'backward'
+        client.publish ("Portal",json.dumps(data))
     
     time.sleep(0.1)
