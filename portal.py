@@ -31,7 +31,7 @@ dataW, srW = sf.read("TestAudio/whispers3.wav")
 dataEnter, srEnter = sf.read("audio/Portal/PortalEnter.wav")
 dataExit, srExit = sf.read("audio/Portal/PortalExit.wav")
 
-client = mqtt.Client("rasp")
+client = mqtt.Client(socket.gethostname())
 client.on_connect = on_connect
 client.on_message = on_message
 try:
