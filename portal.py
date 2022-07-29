@@ -54,7 +54,7 @@ while True:
     if time.time() - last > 30:
       # send keep alive every 30 seconds
       last = time.time()
-      fieldDict = { "sender":"portal1" }
+      fieldDict = { "sender":socket.gethostname() }
       tagsDict = { "host":socket.gethostname() }
       msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
       json_object = json.dumps(msgDict)
@@ -66,7 +66,7 @@ while True:
 
       if line=="enter":
         sd.play(dataEnter,srEnter)
-        fieldDict = { "sender":"portal1", "direction":"forward" }
+        fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
         json_object = json.dumps(msgDict)
@@ -74,7 +74,7 @@ while True:
 
       if line=="exit":
         sd.play(dataExit,srExit)
-        fieldDict = { "sender":"portal1", "direction":"backward" }
+        fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
         json_object = json.dumps(msgDict)
