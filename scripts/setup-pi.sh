@@ -19,6 +19,7 @@ echo "export PATH=\$PATH:/home/moonlight/bin">> ~/.bashrc
 sed -i -e "s/additional_urls: \[\]/additional_urls: \n    \[https:\/\/adafruit.github.io\/arduino-board-index\/package_adafruit_index.json\]/g" ~/.arduino15/arduino-cli.yaml
 ~/bin/arduino-cli core update-index
 ~/bin/arduino-cli core install adafruit:samd
+~/bin/arduino-cli core install arduino:avr
 ~/bin/arduino-cli lib install FastLED
 
 #enable serial terminal
