@@ -8,7 +8,7 @@ rm influxdb.key
 #install packages
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y mosquitto-clients libasound-dev python3 libportaudio2 libsndfile1 python3-numpy libfl2 telegraf python3-pip
+sudo apt install -y mosquitto-clients libasound-dev python3 libportaudio2 libsndfile1 python3-numpy libfl2 telegraf python3-pip screen
 sudo pip install sounddevice pyserial paho-mqtt soundfile
 
 #install arduino cli
