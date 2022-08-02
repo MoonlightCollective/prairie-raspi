@@ -11,7 +11,7 @@ git checkout .
 git pull
 
 
-if [[ git diff-index --name-only HEAD | grep -e 'portal1.ino' -e `readlink portal1.ino` ]] || [[ $1 == "force" ]] ; then
+if git diff-index --name-only HEAD | grep -e '$HOSTNAME.ino' -e `readlink $HOSTNAME.ino`  || [[ "$1" == "force" ]] ; then
 
     cd ~/prairie-raspi/arduino
 
