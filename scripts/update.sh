@@ -11,9 +11,9 @@ git checkout .
 git pull
 
 
-if git diff-index --name-only HEAD | grep -e '$HOSTNAME.ino' -e `readlink $HOSTNAME.ino`  || [[ "$1" == "force" ]] ; then
+cd ~/prairie-raspi/arduino
 
-    cd ~/prairie-raspi/arduino
+if git diff-index --name-only HEAD | grep -e '$HOSTNAME.ino' -e `readlink $HOSTNAME.ino`  || [[ "$1" == "force" ]] ; then
 
     if [[ "$HOSTNAME" == "portal1" ]]; then
             echo "Updating portal 1 arduino"
@@ -42,13 +42,13 @@ if git diff-index --name-only HEAD | grep -e '$HOSTNAME.ino' -e `readlink $HOSTN
     if [[ "$HOSTNAME" == "booth1" ]]; then
             echo "Updating booth 1 arduino"
             arduino-cli compile --fqbn arduino:avr:nano booth1.ino
-            arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:nano booth1.ino
+            arduino-cli upload -p /dev/ttyUSB0 --fqbn arduino:avr:nano booth1.ino
     fi
 
     if [[ "$HOSTNAME" == "booth2" ]]; then
             echo "Updating booth 2 arduino"
             arduino-cli compile --fqbn arduino:avr:nano booth2.ino
-            arduino-cli upload -p /dev/ttyACM0 --fqbn arduino:avr:nano booth2.ino
+            arduino-cli upload -p /dev/ttyUSB0 --fqbn arduino:avr:nano booth2.ino
     fi
 fi
 
