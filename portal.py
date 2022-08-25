@@ -28,6 +28,7 @@ def sendArduino(msg):
 
 # Starting the mixer
 mixer.init()
+mixer.pre_init(44100, 16, 2, 4096)
   
 # Loading the song
 mixer.music.load("audio/PortalWhispers.wav")
