@@ -30,7 +30,7 @@ def sendArduino(msg):
 mixer.init()
   
 # Loading the song
-mixer.music.load("TestAudio/PortalWhispers.wav")
+mixer.music.load("audio/PortalWhispers.wav")
 
 # Setting the volume
 mixer.music.set_volume(0.7)
