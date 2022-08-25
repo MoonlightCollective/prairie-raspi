@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+import pygame
+from pygame import mixer
 import serial
 import time
 import paho.mqtt.client as mqtt
-import sounddevice as sd
-import soundfile as sf
 import sys
 import json
 import socket
@@ -26,10 +26,20 @@ def sendArduino(msg):
     print("sending to arduino: "+msg)
     ser.write(msg.encode('utf-8'))
 
-data, sr = sf.read("TestAudio/transition.wav")
-dataW, srW = sf.read("TestAudio/whispers3.wav")
-dataEnter, srEnter = sf.read("audio/Portal/PortalEnter.wav")
-dataExit, srExit = sf.read("audio/Portal/PortalExit.wav")
+# Starting the mixer
+mixer.init()
+  
+# Loading the song
+mixer.music.load("TestAudio/PortalWhispers.wav")
+
+# Setting the volume
+mixer.music.set_volume(0.7)
+  
+# Start playing the song
+mixer.music.play(-1)
+
+enterSnd = pygame.mixer.Sound('audio/Portal/PortalEnter.wav')
+exitSnd = pygame.mixer.Sound('audio/Portal/PortalExit.wav')
 
 client = mqtt.Client(socket.gethostname())
 client.on_connect = on_connect
@@ -65,7 +75,7 @@ while True:
       print(line)
 
       if line=="enter":
-        sd.play(dataEnter,srEnter)
+        enterSnd.play(0);
         fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
@@ -73,7 +83,7 @@ while True:
         client.publish ("portal",json_object)
 
       if line=="exit":
-        sd.play(dataExit,srExit)
+        exitSnd.play(0);
         fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
