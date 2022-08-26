@@ -26,6 +26,10 @@ def sendArduino(msg):
     print("sending to arduino: "+msg)
     ser.write(msg.encode('utf-8'))
 
+#figure out whether we are an odd or even portal
+host = socket.gethostname()
+portalNum = host[-1:]  
+
 # Starting the mixer
 mixer.init()
 mixer.pre_init(44100, 16, 2, 4096)
@@ -41,7 +45,11 @@ mixer.pre_init(44100, 16, 2, 4096)
 
 enterSnd = pygame.mixer.Sound('audio/Portal/PortalEnter.wav')
 exitSnd = pygame.mixer.Sound('audio/Portal/PortalExit.wav')
-whisperSnd = pygame.mixer.Sound('audio/PortalWhispers.wav')
+
+if (portalNum % 2 == 0): 
+  whisperSnd = pygame.mixer.Sound('audio/PortalWhispers-Set1Only.wav')
+else:
+  whisperSnd = pygame.mixer.Sound('audio/PortalWhispers-Set2Only.wav')
 
 #start the sound loop
 whisperSnd.play(-1)
