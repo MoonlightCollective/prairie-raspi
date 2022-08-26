@@ -41,7 +41,7 @@ mixer.pre_init(44100, 16, 2, 4096)
 
 enterSnd = pygame.mixer.Sound('audio/Portal/PortalEnter.wav')
 exitSnd = pygame.mixer.Sound('audio/Portal/PortalExit.wav')
-whisperSnd = pygame.mixer.Sound('audio/PortalWhispers.ogg')
+whisperSnd = pygame.mixer.Sound('audio/PortalWhispers.wav')
 
 #start the sound loop
 whisperSnd.play(-1)
