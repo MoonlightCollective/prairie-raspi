@@ -31,16 +31,20 @@ mixer.init()
 mixer.pre_init(44100, 16, 2, 4096)
   
 # Loading the song
-mixer.music.load("audio/PortalWhispers.wav")
+# mixer.music.load("audio/PortalWhispers.wav")
 
 # Setting the volume
-mixer.music.set_volume(0.7)
+# mixer.music.set_volume(0.7)
   
 # Start playing the song
-mixer.music.play(-1)
+# mixer.music.play(-1)
 
 enterSnd = pygame.mixer.Sound('audio/Portal/PortalEnter.wav')
 exitSnd = pygame.mixer.Sound('audio/Portal/PortalExit.wav')
+whisperSnd = pygame.mixer.Sound('audio/PortalWhispers.wav')
+
+#start the sound loop
+whisperSnd.play(-1)
 
 client = mqtt.Client(socket.gethostname())
 client.on_connect = on_connect
