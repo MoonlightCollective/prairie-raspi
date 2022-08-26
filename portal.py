@@ -82,7 +82,7 @@ while True:
       tagsDict = { "host":socket.gethostname() }
       msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
       json_object = json.dumps(msgDict)
-      client.publish ("portal",json_object)
+      #client.publish ("portal",json_object) #temporarily disable keep-alive
 
     if ser.in_waiting > 0:
       line = ser.readline().decode('utf-8').rstrip()
@@ -104,4 +104,4 @@ while True:
         json_object = json.dumps(msgDict)
         client.publish ("portal",json_object)
     
-    time.sleep(0.1)
+    time.sleep(0.2)
