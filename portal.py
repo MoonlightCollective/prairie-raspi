@@ -28,7 +28,8 @@ def sendArduino(msg):
 
 #figure out whether we are an odd or even portal
 host = socket.gethostname()
-portalNum = host[-1:]  
+portalNum = int(host[-1:])  
+print("running on portal "+portalNum)
 
 # Starting the mixer
 mixer.init()
