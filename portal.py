@@ -90,7 +90,11 @@ while True:
 
       if line=="enter":
         enterSnd.play(0);
-        fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
+
+        if portalNum == 1 || portalNum == 2:
+          fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
+        else:
+          fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
         json_object = json.dumps(msgDict)
@@ -98,7 +102,10 @@ while True:
 
       if line=="exit":
         exitSnd.play(0);
-        fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
+        if portalNum == 1 || portalNum == 2:
+          fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
+        else:
+          fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
         tagsDict = { "host":socket.gethostname() }
         msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
         json_object = json.dumps(msgDict)
