@@ -91,7 +91,7 @@ while True:
       if line=="enter":
         enterSnd.play(0);
 
-        if portalNum == 1 || portalNum == 2:
+        if portalNum == 1 or portalNum == 2:
           fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
         else:
           fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
@@ -102,7 +102,7 @@ while True:
 
       if line=="exit":
         exitSnd.play(0);
-        if portalNum == 1 || portalNum == 2:
+        if portalNum == 1 or portalNum == 2:
           fieldDict = { "sender":socket.gethostname(), "direction":"forward" }
         else:
           fieldDict = { "sender":socket.gethostname(), "direction":"backward" }
