@@ -2,6 +2,8 @@
 These files assume a certain set of dependencies.
 To set up a new Raspberry PI device for use in our installation:
 
+
+For a moonlight collective installation, start with a pi setup using the imaging instructions in google drive to pre-set username, password, hostname, and wifi settings
 ```
 sudo apt install git
 git clone https://github.com/MoonlightCollective/prairie-raspi
