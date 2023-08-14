@@ -1,7 +1,7 @@
 #include "FastLED.h"
 #include "lib8tion.h"
 
-#define NUM_LEDS 50
+#define NUM_LEDS 107
 CRGBArray<NUM_LEDS> leds;
 
 // inputs
@@ -14,6 +14,8 @@ CRGBArray<NUM_LEDS> leds;
 #define LED_PIN 8
 #define PRIVACYFILM_PIN 6
 #define OCCUPIED_PIN 7
+
+
 
 char dataString[50] = {0};
 uint16_t oldtime = millis();
@@ -37,6 +39,15 @@ bool micro = false;
 bool ir = false;
 bool proximity = false;
 
+
+#define LED_IDLE_LEVEL 150
+
+
+#define STATE_1_TIME 5
+#define STATE_2_TIME 10
+#define STATE_3_TIME 5
+#define STATE_4_TIME 10
+
 // state machine for heart beat pulse
 // 0 = idle
 // 1 = first beat
@@ -50,7 +61,7 @@ void setup()
 
 // booth is likely GRB order
   FastLED.addLeds<WS2813, LED_PIN, GRB>(leds, NUM_LEDS).setCorrection( TypicalLEDStrip );
-  FastLED.setBrightness(128);
+  FastLED.setBrightness(255);
 
   fill_solid(leds,leds.size(), CRGB(100,100,100)); // on by default -- default brightness is 100; pulse up to 200 for beat
   FastLED.show();
@@ -91,6 +102,8 @@ void loop() {
   uint16_t t = millis();
   uint16_t dt = t - oldtime;
   oldtime = t;
+
+  delay(20);
 
   // process all the cooldown timers
   // after cooldown time expires, use polling to check if active state has ended
@@ -168,51 +181,51 @@ void loop() {
     if (triggerPulse)   // trigger heart beat pulse
     {
       triggerPulse = false;
-      loopCounter = 5;
+      loopCounter = STATE_1_TIME;
       state = 1;
     }
   } else if (state == 1)
   {
-    int b = 100 + (20 * (5-loopCounter));
+    int b = LED_IDLE_LEVEL + (20 * (5-loopCounter));
     fill_solid(leds,leds.size(), CRGB(b,b,b)); 
     FastLED.show();
     loopCounter--;
     if (loopCounter == 0)
     {
       state = 2;
-      loopCounter  = 10;
+      loopCounter  = STATE_2_TIME;
     }
   } else if (state == 2)
   {
-    int b = 100 + (10 * loopCounter);
+    int b = LED_IDLE_LEVEL + (10 * loopCounter);
     fill_solid(leds,leds.size(), CRGB(b,b,b)); 
     FastLED.show();
     loopCounter--;
     if (loopCounter == 0)
     {
       state = 3;
-      loopCounter  = 5;
+      loopCounter  = STATE_3_TIME;
     }
   } else if (state == 3)
   {
-    int b = 100 + (20 * (5-loopCounter));
+    int b = LED_IDLE_LEVEL + (20 * (5-loopCounter));
     fill_solid(leds,leds.size(), CRGB(b,b,b)); 
     FastLED.show();
     loopCounter--;
     if (loopCounter == 0)
     {
       state = 4;
-      loopCounter  = 10;
+      loopCounter  = STATE_4_TIME;
     }
   } else if (state == 4)
   {
-    int b = 100 + (10 * loopCounter);
+    int b = LED_IDLE_LEVEL + (10 * loopCounter);
     fill_solid(leds,leds.size(), CRGB(b,b,b)); 
     FastLED.show();
     loopCounter--;
     if (loopCounter == 0)
     {
-      state = 1;
+      state = 0;
     }
   }  
     

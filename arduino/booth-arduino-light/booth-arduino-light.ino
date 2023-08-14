@@ -152,7 +152,21 @@ void loop() {
     Serial.println("proximity_on");    
   }
 
-  // now handle state machine for pulsing the light
+
+    
+  // now handle incoming messages via serial 
+  if (Serial.available() > 0) {
+    String data = Serial.readStringUntil('\n');
+    if (data == "beat")
+    {
+      triggerPulse = true;
+    }
+  }
+}
+
+void update_light()
+{
+    // now handle state machine for pulsing the light
   if (state == 0)
   {
     if (triggerPulse)   // trigger heart beat pulse
@@ -198,16 +212,7 @@ void loop() {
     loopCounter--;
     if (loopCounter == 0)
     {
-      state = 1;
+      state = 0;
     }
   }  
-    
-  // now handle incoming messages via serial 
-  if (Serial.available() > 0) {
-    String data = Serial.readStringUntil('\n');
-    if (data == "beat")
-    {
-      triggerPulse = true;
-    }
-  }
 }
