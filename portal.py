@@ -49,9 +49,9 @@ enterSnd = pygame.mixer.Sound('audio/Portal/PortalEnter.wav')
 exitSnd = pygame.mixer.Sound('audio/Portal/PortalExit.wav')
 
 if (portalNum % 2 == 0): 
-  whisperSnd = pygame.mixer.Sound('audio/PortalWhispers-Set1Only.wav')
+  whisperSnd = pygame.mixer.Sound('audio/Portal/PortalWhispers-Set1Only.wav')
 else:
-  whisperSnd = pygame.mixer.Sound('audio/PortalWhispers-Set2Only.wav')
+  whisperSnd = pygame.mixer.Sound('audio/Portal/PortalWhispers-Set2Only.wav')
 
 #start the sound loop
 whisperSnd.play(-1)
