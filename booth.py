@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
+import pygame
+from pygame import mixer
 import serial
 import time
 import paho.mqtt.client as mqtt
-import sounddevice as sd
-import soundfile as sf
 import sys
+import json
+import socket
+import time
+import math
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
+    mqtt_connection = True
 
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    client.subscribe("Portal")
+    client.subscribe("booth")
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
@@ -22,45 +27,91 @@ def sendArduino(msg):
     print("sending to arduino: "+msg)
     ser.write(msg.encode('utf-8'))
 
-data, sr = sf.read("TestAudio/transition.wav")
-dataW, srW = sf.read("TestAudio/whispers3.wav")
-dataEnter, srEnter = sf.read("audio/Portal/PortalIdea2.wav")
-dataExit, srExit = sf.read("audio/Portal/PortalIdea6b.wav")
+#figure out whether we are an odd or even portal
+host = socket.gethostname()
+boothNum = int(host[-1:])  
+print("running on booth "+ str(boothNum))
 
-client = mqtt.Client("rasp")
+# Starting the mixer
+mixer.init()
+mixer.pre_init(44100, 16, 2, 4096)
+  
+# Loading the song
+# mixer.music.load("audio/PortalWhispers.wav")
+
+# Setting the volume
+# mixer.music.set_volume(0.7)
+  
+# Start playing the song
+# mixer.music.play(-1)
+
+heartbeatSnd = pygame.mixer.Sound('audio/Booth/HbTestLoop.wav')
+
+
+client = mqtt.Client(socket.gethostname())
 client.on_connect = on_connect
 client.on_message = on_message
-try:
-  client.connect(host="192.168.0.202")
-  client.loop_start()
-except:
-  pass
+mqtt_connection = False
 
 ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
 ser.reset_input_buffer()
 
 #messages we might get from the arduino:
-# "enter" = person walks through portal going forward
-# "exit" = person walks through the other direction
 
-last = time.time()
+
+current_distance = 2000
+
+def send_mqtt():
+      tagsDict = { "host":socket.gethostname() }
+      msgDict = { "name":"trigger", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+      json_object = json.dumps(msgDict)
+
+      client.publish ("portal",json_object)
+
+
+def distance_to_period(dist_centimeters):
+  period_msecs = dist_centimeters * 1.0
+  return period_msecs
+
+last_heatbeat = time.time()
+
+def beat_heart():
+  if time.time() - last_heatbeat > distance_to_period(current_distance):
+    last_heatbeat = time.time()
+    heartbeatSnd.play();
+
+last_keep_alive = time.time()
+
+def keep_alive():
+  if time.time() - last_keep_alive > 30:
+  # send keep alive every 30 seconds
+  last_keep_alive = time.time()
+
+  if mqtt_connection is False:
+    try:
+      client.connect(host="192.168.0.202")
+      client.loop_start()
+    except Exception as e:
+      print (e)
+
+  fieldDict = { "sender":socket.gethostname() }
+  tagsDict = { "host":socket.gethostname() }
+  msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+  json_object = json.dumps(msgDict)
+  #client.publish ("booth",json_object) #temporarily disable keep-alive
 
 while True:
-    if time.time() - last > 30:
-      # send keep alive every 30 seconds
-      last = time.time()
-      client.publish ("Portal","alive")
 
-    if ser.in_waiting > 0:
-      line = ser.readline().decode('utf-8').rstrip()
-      print(line)
+  beat_heart()
 
-      if line=="enter":
-        sd.play(dataEnter,srEnter)
-        client.publish ("Portal","Enter")
+  if ser.in_waiting > 0:
+    line = ser.readline().decode('utf-8').rstrip()
+    params = line.split(' ')
+    print(params)
 
-      if line=="exit":
-        sd.play(dataExit,srExit)
-        client.publish ("Portal","Exit")
-    
-    time.sleep(0.1)
+    if params[0]=="dist":
+
+      current_distance = params[1]
+
+
+  time.sleep(0.01)
