@@ -53,7 +53,7 @@ client.on_connect = on_connect
 client.on_message = on_message
 mqtt_connection = False
 
-ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
 ser.reset_input_buffer()
 
 #messages we might get from the arduino:
@@ -70,7 +70,7 @@ def send_mqtt():
 
 
 def distance_to_period(dist_centimeters):
-  period_msecs = dist_centimeters * 1.0
+  period_msecs = dist_centimeters * 3.3
   return period_msecs
 
 last_heatbeat = time.time()
