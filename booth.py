@@ -85,20 +85,20 @@ last_keep_alive = time.time()
 def keep_alive():
   if time.time() - last_keep_alive > 30:
   # send keep alive every 30 seconds
-  last_keep_alive = time.time()
+    last_keep_alive = time.time()
 
-  if mqtt_connection is False:
-    try:
-      client.connect(host="192.168.0.202")
-      client.loop_start()
-    except Exception as e:
-      print (e)
+    if mqtt_connection is False:
+      try:
+        client.connect(host="192.168.0.202")
+        client.loop_start()
+      except Exception as e:
+        print (e)
 
-  fieldDict = { "sender":socket.gethostname() }
-  tagsDict = { "host":socket.gethostname() }
-  msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
-  json_object = json.dumps(msgDict)
-  #client.publish ("booth",json_object) #temporarily disable keep-alive
+    fieldDict = { "sender":socket.gethostname() }
+    tagsDict = { "host":socket.gethostname() }
+    msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
+    json_object = json.dumps(msgDict)
+    #client.publish ("booth",json_object) #temporarily disable keep-alive
 
 while True:
 
