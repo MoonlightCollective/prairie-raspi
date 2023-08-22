@@ -73,19 +73,19 @@ def distance_to_period(dist_centimeters):
   period_msecs = dist_centimeters * 3.3
   return period_msecs
 
-last_heatbeat = time.time()
 
 def beat_heart():
-  if time.time() - last_heatbeat > distance_to_period(current_distance):
-    last_heatbeat = time.time()
+  if time.time() - beat_heart.last > distance_to_period(current_distance):
+    beat_heart.last = time.time()
     heartbeatSnd.play();
+beat_heart.last = time.time()
 
-last_keep_alive = time.time()
+
 
 def keep_alive():
-  if time.time() - last_keep_alive > 30:
+  if time.time() - keep_alive.last > 30:
   # send keep alive every 30 seconds
-    last_keep_alive = time.time()
+    keep_alive.last = time.time()
 
     if mqtt_connection is False:
       try:
@@ -99,6 +99,7 @@ def keep_alive():
     msgDict = { "name":"keep-alive", "fields":fieldDict, "tags":tagsDict, "timestamp":math.floor(time.time()) }
     json_object = json.dumps(msgDict)
     #client.publish ("booth",json_object) #temporarily disable keep-alive
+keep_alive.last = time.time()
 
 while True:
 
