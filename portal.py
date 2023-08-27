@@ -33,8 +33,7 @@ portalNum = int(host[-1:])
 print("running on portal "+ str(portalNum))
 
 # Starting the mixer
-mixer.init()
-mixer.pre_init(44100, 16, 2, 4096)
+mixer.init(48000, -16, 2, 4096)
   
 # Loading the song
 # mixer.music.load("audio/PortalWhispers.wav")
@@ -46,12 +45,17 @@ mixer.pre_init(44100, 16, 2, 4096)
 # mixer.music.play(-1)
 
 enterSnd = pygame.mixer.Sound('audio/Portal/Portal_2_Entrance_v3.wav')
+enterSnd.set_volume(0.8)
+
 exitSnd = pygame.mixer.Sound('audio/Portal/Portal_2_Exit_v3.wav')
+exitSnd.set_volume(0.8)
 
 if (portalNum % 2 == 0): 
   whisperSnd = pygame.mixer.Sound('audio/Portal/PortalWhispers-Set1Only.wav')
 else:
   whisperSnd = pygame.mixer.Sound('audio/Portal/PortalWhispers-Set2Only.wav')
+
+whisperSnd.set_volume(0.8)
 
 #start the sound loop
 whisperSnd.play(-1)
